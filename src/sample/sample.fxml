@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.canvas.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
@@ -33,8 +34,8 @@
          <image>
             <Image fx:id="myImage" url="@../Kolo.jpg" />
          </image></ImageView>
-      <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
-      <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
+       <Canvas fx:id="myCanvas" height="200.0" width="200.0" GridPane.columnIndex="2" />
+       <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
       <Text rotate="-30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Liczba detektorów" wrappingWidth="122.7294921875" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets left="2.0" />
