@@ -1,3 +1,5 @@
+package sample;
+
 public class Thing {
     private double x;
     private double y;
