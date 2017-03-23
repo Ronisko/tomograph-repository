@@ -34,7 +34,7 @@
          <image>
             <Image fx:id="myImage" url="@../Kolo.jpg" />
          </image></ImageView>
-       <Canvas fx:id="myCanvas" height="200.0" width="200.0" GridPane.columnIndex="2" />
+       <ImageView fx:id="sinogram" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
        <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
       <Text rotate="-30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Liczba detektorów" wrappingWidth="122.7294921875" GridPane.rowIndex="1">
          <GridPane.margin>
