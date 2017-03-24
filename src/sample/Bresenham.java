@@ -1,16 +1,18 @@
 package sample;
 
-import javafx.util.Pair;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import javafx.scene.image.Image;
 
 public class Bresenham {
-    private int d, dx, dy, ai, bi, xi, yi;
-    private int x, y;
+    private static int dx, dy, xi, yi;
+    private static double maxBrightness = 0.0;
+    private static double minBrightness = 1.0;
+    private static Image myImage;
 
-    void directionX(int a, int b, boolean isX) {
+    public static void setMyImage(Image myImage) {
+        Bresenham.myImage = myImage;
+    }
+
+    private static void directionX(int a, int b, boolean isX) {
         if (isX) {
             if (a < b) {
                 xi = 1;
@@ -30,13 +32,16 @@ public class Bresenham {
         }
     }
 
-    ArrayList<Pair<Integer,Integer>> bresenhamLine(int x1, int y1, int x2, int y2) {
-        ArrayList<Pair<Integer, Integer>> points = new ArrayList<>();
+    public static double bresenhamLine(int x1, int y1, int x2, int y2) {
+        int d, ai, bi;
+        int x, y;
+        double brightness;
+        int size = 1;
         x = x1;
         y = y1;
         directionX(x1, x2, true);
         directionX(y1, y2, false);
-        points.add(new Pair<>(x, y));
+        brightness = getColor(x, y);
         if (dx > dy)
         {
             ai = (dy - dx) * 2;
@@ -55,7 +60,8 @@ public class Bresenham {
                     d += bi;
                     x += xi;
                 }
-                points.add(new Pair<>(x, y));
+                brightness += getColor(x, y);
+                size++;
             }
         }
         else
@@ -76,12 +82,29 @@ public class Bresenham {
                     d += bi;
                     y += yi;
                 }
-                points.add(new Pair<>(x, y));
-
+                brightness += getColor(x, y);
+                size++;
             }
         }
-
-        return points;
+        if (brightness/size > maxBrightness) {
+            maxBrightness = brightness/size;
+        }
+        if (brightness/size < minBrightness) {
+            minBrightness = brightness/size;
+        }
+        return brightness/size;
     }
 
+    private static double getColor(int x, int y) {
+        int imageWidth = (int)myImage.getWidth()/2;
+        return Controller.getPixelReader().getColor((x+imageWidth)%(int)(myImage.getWidth()), (y+imageWidth)%(int)(myImage.getWidth())).getBrightness();
+    }
+
+    public static double getMaxBrightness() {
+        return maxBrightness;
+    }
+
+    public static double getMinBrightness() {
+        return minBrightness;
+    }
 }
