@@ -3,7 +3,7 @@ package sample;
 public class Input {
     private static double alfa;
     private static double fi;
-    private static double r;
+    private static int r;
     private static int detectorsNumber;
     private static int emittersNumber;
 
@@ -11,7 +11,7 @@ public class Input {
         Input.detectorsNumber = d;
         Input.emittersNumber = e;
     }
-    public static void setAll(double a, double f, double r) {
+    public static void setAll(double a, double f, int r) {
         Input.alfa = a;
         Input.fi = f;
         Input.r = r;

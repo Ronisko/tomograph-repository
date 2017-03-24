@@ -37,6 +37,7 @@ public class Controller  {
     private static PixelReader imageReader, sinogramReader;
     private static PixelWriter sinogramWriter, outputImageWriter;
     private static WritableImage writableSinogram, writableOutputImage;
+    private static int size;
 
 
 
@@ -70,10 +71,12 @@ public class Controller  {
     }
 
     private void prepareSinogramReader() {
+//        System.out.println("DUPA");
         sinogramReader = writableSinogram.getPixelReader();
-        int width = (int)writableSinogram.getWidth();
-        System.out.println();
-        int height = (int)writableSinogram.getHeight();
+        int width = (int)writableSinogram.getWidth(); //liczba detektorów
+//        System.out.println(width);
+        int height = (int)writableSinogram.getHeight(); //liczba emiterów
+//        System.out.println(height);
         byte[] buffer = new byte[width * height * 4];
         sinogramReader.getPixels(0,0, width, height, PixelFormat.getByteBgraInstance(), buffer,0,width * 4);
     }
@@ -81,18 +84,19 @@ public class Controller  {
 
 
     private void makeSinogram() {
-        writableSinogram = new WritableImage(Input.getDetectorsNumber(), Input.getEmittersNumber());
+        writableSinogram = new WritableImage(Input.getEmittersNumber(), Input.getDetectorsNumber());
         sinogramWriter = writableSinogram.getPixelWriter();
+        sinogram.setImage(writableSinogram);
 
-        Radon.radonTransform(sinogramWriter, sinogram, writableSinogram);
+        Radon.radonTransform();
     }
 
     private void makeOutputImage() {
         writableOutputImage = new WritableImage((int)myImage.getWidth(), (int)myImage.getHeight());
         outputImageWriter = writableOutputImage.getPixelWriter();
+        output.setImage((writableOutputImage));
 
-        Radon.inverseRadonTransform(outputImageWriter, output, writableOutputImage, (int)myImage.getHeight());
-
+        Radon.inverseRadonTransform((int)myImage.getHeight());
     }
 
     public void setStage(Stage stage) {
@@ -107,14 +111,25 @@ public class Controller  {
         return sinogramReader;
     }
 
-
     public static WritableImage getWritableSinogram() {
         return writableSinogram;
     }
 
+    public static PixelWriter getSinogramWriter() {
+        return sinogramWriter;
+    }
+
+    public static PixelWriter getOutputImageWriter() {
+        return outputImageWriter;
+    }
+
+    public static int getSize() {
+        return size;
+    }
     private void prepareInput() {
+        size = (int)myImage.getHeight();
         Bresenham.setMyImage(myImage);
         Input.setNumbers(Integer.parseInt(myTextField1.getText()), Integer.parseInt(myTextField2.getText()));
-        Input.setAll((2*Math.PI)/Input.getEmittersNumber(), Math.toRadians(Double.parseDouble(myTextField3.getText())), myImage.getHeight()/2);
+        Input.setAll((2*Math.PI)/Input.getEmittersNumber(), Math.toRadians(Double.parseDouble(myTextField3.getText())), (int)myImage.getHeight()/2);
     }
 }

@@ -55,6 +55,10 @@ public class Bresenham {
     }
 
     private static void bresenhamLine(int x1, int y1, int x2, int y2, boolean isInverted) {
+        double color= 0;
+        if (isInverted) {
+            color = getSinogramColor(sinogramX, sinogramY);
+        }
         int d, ai, bi;
         int x, y;
         double brightness = 0.0;
@@ -64,7 +68,7 @@ public class Bresenham {
         directionX(x1, x2, true);
         directionX(y1, y2, false);
         if (isInverted) {
-            outputImage.get((int)((x+myImage.getWidth()/2)%myImage.getWidth())).get((int)((y+myImage.getHeight()/2)%myImage.getHeight())).increaseBrightness(getSinogramColor(sinogramX, sinogramY));
+            outputImage.get(x + (int)myImage.getWidth()/2).get(y + (int)myImage.getWidth()/2).increaseBrightness(color);
         } else {
             brightness = getColor(x, y);
         }
@@ -84,8 +88,7 @@ public class Bresenham {
                 }
 
                 if (isInverted) {
-                    outputImage.get((int)((x+myImage.getWidth()/2)%myImage.getWidth())).get((int)((y+myImage.getHeight()/2)%myImage.getHeight())).increaseBrightness(getSinogramColor(sinogramX, sinogramY));
-
+                    outputImage.get(x + (int)myImage.getWidth()/2).get(y + (int)myImage.getWidth()/2).increaseBrightness(color);
                 } else {
                     brightness += getColor(x, y);
                     size++;
@@ -111,9 +114,7 @@ public class Bresenham {
                     y += yi;
                 }
                 if (isInverted) {
-                    outputImage.get((int)((x+myImage.getWidth()/2)%myImage.getWidth())).get((int)((y+myImage.getHeight()/2)%myImage.getHeight())).increaseBrightness(getSinogramColor(sinogramX, sinogramY));
-
-
+                    outputImage.get(x + (int)myImage.getWidth()/2).get(y + (int)myImage.getWidth()/2).increaseBrightness(color);
                 } else {
                     brightness += getColor(x, y);
                     size++;
@@ -129,8 +130,8 @@ public class Bresenham {
             if (brightness/size < minBrightness) {
                 minBrightness = brightness/size;
             }
+            Bresenham.brightness2 = brightness/size;
         }
-        Bresenham.brightness2 = brightness/size;
     }
 
     private static double getColor(int x, int y) {
@@ -139,10 +140,9 @@ public class Bresenham {
     }
 
     private static double getSinogramColor(int x, int y) {
-//        System.out.println(x + " " + y);
         int imageWidth = (int)Controller.getWritableSinogram().getWidth();
         int imageHeight = (int)Controller.getWritableSinogram().getHeight();
-        return Controller.getSinogramReader().getColor(((x+imageWidth/2)%(imageWidth)), ((y+imageHeight/2)%imageHeight)).getBrightness();
+        return Controller.getSinogramReader().getColor(y, x).getBrightness();
     }
 
     public static double getMaxBrightness() {

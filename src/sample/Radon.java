@@ -13,7 +13,7 @@ public class Radon {
     private static List<List<Double>> brightnesses = new ArrayList<>();
 
 
-    public static void radonTransform(PixelWriter pixelWriter, ImageView sin, WritableImage wt) {
+    public static void radonTransform() {
         detectors = new ArrayList<>();
 
         emitter = new Emitter();
@@ -32,19 +32,21 @@ public class Radon {
             }
             brightnesses.add(line);
         }
+        drawSinogram();
 
+    }
+
+    private static void drawSinogram() {
         for (int i = 0; i < Input.getEmittersNumber(); i++) {
             for (int j = 0; j < Input.getDetectorsNumber(); j++) {
-                pixelWriter.setColor(j, i, Color.hsb(0, 0.0, ((brightnesses.get(i).get(j)-Bresenham.getMinBrightness())/(Bresenham.getMaxBrightness()-Bresenham.getMinBrightness()))));
+                Controller.getSinogramWriter().setColor(i, j, Color.hsb(0, 0.0, ((brightnesses.get(i).get(j)-Bresenham.getMinBrightness())/(Bresenham.getMaxBrightness()-Bresenham.getMinBrightness()))));
             }
         }
-        sin.setImage(wt);
-
     }
 
     private static List<List<Pair>> outputImage = new ArrayList<>();
 
-    public static void inverseRadonTransform(PixelWriter pixelWriter, ImageView sin, WritableImage wt, int range) {
+    public static void inverseRadonTransform(int range) {
         Bresenham.setOutputImage(outputImage);
         for (int i = 0; i < range; i++) {
             List<Pair> list = new ArrayList<>();
@@ -55,22 +57,19 @@ public class Radon {
         }
 
         for (int i = 0; i < Input.getEmittersNumber(); i++) {
-            emitter.setAll(Math.floor(Input.getR()*Math.cos(i*Input.getAlfa())), Math.floor(Input.getR()*Math.sin(i*Input.getAlfa())));
+            emitter.setAll(Input.getR()*Math.cos(i*Input.getAlfa()), Input.getR()*Math.sin(i*Input.getAlfa()));
             for (int j = 0; j < Input.getDetectorsNumber(); j++) {
                 detectors.get(j).setAll(
                         Input.getR() * Math.cos(i*Input.getAlfa() + Math.PI - Input.getFi()/2 + j*(Input.getFi()/(Input.getDetectorsNumber()-1))),
                         Input.getR() * Math.sin(i*Input.getAlfa() + Math.PI - Input.getFi()/2 + j*(Input.getFi()/(Input.getDetectorsNumber()-1))));
-                Bresenham.inverted((int)detectors.get(j).getX(), (int)detectors.get(j).getY(), (int)emitter.getX(), (int)emitter.getY(), i, j);
+                Bresenham.inverted((int)detectors.get(j).getX(), (int)detectors.get(j).getY(), (int)emitter.getX(), (int)emitter.getY(), j, i);
             }
         }
 
         for (int i = 0; i < range; i++) {
             for (int j = 0; j < range; j++) {
-                pixelWriter.setColor(j, i, Color.hsb(0, 0.0, outputImage.get(i).get(j).getBrightness()));
+                Controller.getOutputImageWriter().setColor(i, j, Color.hsb(0, 0.0, outputImage.get(i).get(j).getBrightness()));
             }
         }
-        sin.setImage(wt);
-
     }
-
 }
