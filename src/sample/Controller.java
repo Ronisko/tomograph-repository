@@ -34,8 +34,10 @@ public class Controller  {
     private File file;
     private Stage stage;
     private FileChooser fileChooser = new FileChooser();
-    private static PixelReader pixelReader;
-    private static WritableImage writableImage;
+    private static PixelReader imageReader, sinogramReader;
+    private static PixelWriter sinogramWriter, outputImageWriter;
+    private static WritableImage writableSinogram, writableOutputImage;
+
 
 
     @FXML
@@ -48,31 +50,48 @@ public class Controller  {
 
     @FXML
     private void handleButtonAction() {
-        Bresenham.setMyImage(myImage);
-        pixelReader = myImage.getPixelReader();
+        prepareInput();
+        sinogram.setImage(null);
+
+        prepareImageReader();
+        makeSinogram();
+
+        prepareSinogramReader();
+        makeOutputImage();
+    }
+
+    private void prepareImageReader() {
+        imageReader = myImage.getPixelReader();
         int width = (int)myImage.getWidth();
         int height = (int)myImage.getHeight();
         byte[] buffer = new byte[width * height * 4];
-        pixelReader.getPixels(0,0, width, height, PixelFormat.getByteBgraInstance(), buffer,0,width * 4);
-        sinogram.setImage(null);
-        Input.setNumbers(Integer.parseInt(myTextField1.getText()), Integer.parseInt(myTextField2.getText()));
-        Input.setAll((2*Math.PI)/Input.getEmittersNumber(), Math.toRadians(Double.parseDouble(myTextField3.getText())), myImage.getHeight()/2);
 
-        writableImage = new WritableImage(Input.getDetectorsNumber(), Input.getEmittersNumber());
-        PixelWriter pixelWriter = writableImage.getPixelWriter();
+        imageReader.getPixels(0,0, width, height, PixelFormat.getByteBgraInstance(), buffer,0,width * 4);
+    }
 
-        Radon.radonTransform(pixelWriter, sinogram, writableImage);
+    private void prepareSinogramReader() {
+        sinogramReader = writableSinogram.getPixelReader();
+        int width = (int)writableSinogram.getWidth();
+        System.out.println();
+        int height = (int)writableSinogram.getHeight();
+        byte[] buffer = new byte[width * height * 4];
+        sinogramReader.getPixels(0,0, width, height, PixelFormat.getByteBgraInstance(), buffer,0,width * 4);
+    }
 
-        WritableImage writableImage2 = new WritableImage((int)myImage.getWidth(), (int)myImage.getHeight());
-        PixelWriter pixelWriter2 = writableImage2.getPixelWriter();
 
-        pixelReader = writableImage.getPixelReader();
-        width = (int)writableImage.getWidth();
-        height = (int)writableImage.getHeight();
-        buffer = new byte[width * height * 4];
-        pixelReader.getPixels(0,0, width, height, PixelFormat.getByteBgraInstance(), buffer,0,width * 4);
 
-        Radon.inverseRadonTransform(pixelWriter2, output, writableImage2, (int)myImage.getHeight());
+    private void makeSinogram() {
+        writableSinogram = new WritableImage(Input.getDetectorsNumber(), Input.getEmittersNumber());
+        sinogramWriter = writableSinogram.getPixelWriter();
+
+        Radon.radonTransform(sinogramWriter, sinogram, writableSinogram);
+    }
+
+    private void makeOutputImage() {
+        writableOutputImage = new WritableImage((int)myImage.getWidth(), (int)myImage.getHeight());
+        outputImageWriter = writableOutputImage.getPixelWriter();
+
+        Radon.inverseRadonTransform(outputImageWriter, output, writableOutputImage, (int)myImage.getHeight());
 
     }
 
@@ -80,11 +99,22 @@ public class Controller  {
         this.stage = stage;
     }
 
-    public static PixelReader getPixelReader() {
-        return pixelReader;
+    public static PixelReader getImageReader() {
+        return imageReader;
     }
 
-    public static WritableImage getWritableImage() {
-        return writableImage;
+    public static PixelReader getSinogramReader() {
+        return sinogramReader;
+    }
+
+
+    public static WritableImage getWritableSinogram() {
+        return writableSinogram;
+    }
+
+    private void prepareInput() {
+        Bresenham.setMyImage(myImage);
+        Input.setNumbers(Integer.parseInt(myTextField1.getText()), Integer.parseInt(myTextField2.getText()));
+        Input.setAll((2*Math.PI)/Input.getEmittersNumber(), Math.toRadians(Double.parseDouble(myTextField3.getText())), myImage.getHeight()/2);
     }
 }

@@ -10,8 +10,7 @@ public class Radon {
 
     private static Emitter emitter;
     private static List<Detector> detectors;
-
-    private static List<List<Double>> brightnesseses = new ArrayList<>();
+    private static List<List<Double>> brightnesses = new ArrayList<>();
 
 
     public static void radonTransform(PixelWriter pixelWriter, ImageView sin, WritableImage wt) {
@@ -22,23 +21,21 @@ public class Radon {
             detectors.add(new Detector());
         }
 
-        Bresenham bresenham = new Bresenham();
-
         for (int i = 0; i < Input.getEmittersNumber(); i++) {
             emitter.setAll(Math.floor(Input.getR()*Math.cos(i*Input.getAlfa())), Math.floor(Input.getR()*Math.sin(i*Input.getAlfa())));
-            List<Double> lines = new ArrayList<>();
+            List<Double> line = new ArrayList<>();
             for (int j = 0; j < Input.getDetectorsNumber(); j++) {
                 detectors.get(j).setAll(
                         Input.getR() * Math.cos(i*Input.getAlfa() + Math.PI - Input.getFi()/2 + j*(Input.getFi()/(Input.getDetectorsNumber()-1))),
                         Input.getR() * Math.sin(i*Input.getAlfa() + Math.PI - Input.getFi()/2 + j*(Input.getFi()/(Input.getDetectorsNumber()-1))));
-                lines.add(bresenham.normal((int)emitter.getX(), (int)emitter.getY(), (int)detectors.get(j).getX(), (int)detectors.get(j).getY()));
+                line.add(Bresenham.normal((int)emitter.getX(), (int)emitter.getY(), (int)detectors.get(j).getX(), (int)detectors.get(j).getY()));
             }
-            brightnesseses.add(lines);
+            brightnesses.add(line);
         }
 
         for (int i = 0; i < Input.getEmittersNumber(); i++) {
             for (int j = 0; j < Input.getDetectorsNumber(); j++) {
-                pixelWriter.setColor(j, i, Color.hsb(0, 0.0, ((brightnesseses.get(i).get(j)-Bresenham.getMinBrightness())/(Bresenham.getMaxBrightness()-Bresenham.getMinBrightness()))));
+                pixelWriter.setColor(j, i, Color.hsb(0, 0.0, ((brightnesses.get(i).get(j)-Bresenham.getMinBrightness())/(Bresenham.getMaxBrightness()-Bresenham.getMinBrightness()))));
             }
         }
         sin.setImage(wt);

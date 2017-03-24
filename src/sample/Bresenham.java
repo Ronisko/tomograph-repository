@@ -135,14 +135,14 @@ public class Bresenham {
 
     private static double getColor(int x, int y) {
         int imageWidth = (int)myImage.getWidth()/2;
-        return Controller.getPixelReader().getColor((x+imageWidth)%(int)(myImage.getWidth()), (y+imageWidth)%(int)(myImage.getWidth())).getBrightness();
+        return Controller.getImageReader().getColor((x+imageWidth)%(int)(myImage.getWidth()), (y+imageWidth)%(int)(myImage.getWidth())).getBrightness();
     }
 
     private static double getSinogramColor(int x, int y) {
 //        System.out.println(x + " " + y);
-        int imageWidth = (int)Controller.getWritableImage().getWidth();
-        int imageHeight = (int)Controller.getWritableImage().getHeight();
-        return Controller.getPixelReader().getColor(((x+imageWidth/2)%(imageWidth)), ((y+imageHeight/2)%imageHeight)).getBrightness();
+        int imageWidth = (int)Controller.getWritableSinogram().getWidth();
+        int imageHeight = (int)Controller.getWritableSinogram().getHeight();
+        return Controller.getSinogramReader().getColor(((x+imageWidth/2)%(imageWidth)), ((y+imageHeight/2)%imageHeight)).getBrightness();
     }
 
     public static double getMaxBrightness() {
