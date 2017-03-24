@@ -17,6 +17,9 @@ public class Controller  {
     private ImageView sinogram;
 
     @FXML
+    private ImageView output;
+
+    @FXML
     private TextField myTextField1;
 
     @FXML
@@ -32,6 +35,7 @@ public class Controller  {
     private Stage stage;
     private FileChooser fileChooser = new FileChooser();
     private static PixelReader pixelReader;
+    private static WritableImage writableImage;
 
 
     @FXML
@@ -54,10 +58,21 @@ public class Controller  {
         Input.setNumbers(Integer.parseInt(myTextField1.getText()), Integer.parseInt(myTextField2.getText()));
         Input.setAll((2*Math.PI)/Input.getEmittersNumber(), Math.toRadians(Double.parseDouble(myTextField3.getText())), myImage.getHeight()/2);
 
-        WritableImage writableImage = new WritableImage(Input.getDetectorsNumber(), Input.getEmittersNumber());
+        writableImage = new WritableImage(Input.getDetectorsNumber(), Input.getEmittersNumber());
         PixelWriter pixelWriter = writableImage.getPixelWriter();
 
-        Radon.radonTransform(myImage, pixelWriter, sinogram, writableImage, myImage);
+        Radon.radonTransform(pixelWriter, sinogram, writableImage);
+
+        WritableImage writableImage2 = new WritableImage((int)myImage.getWidth(), (int)myImage.getHeight());
+        PixelWriter pixelWriter2 = writableImage2.getPixelWriter();
+
+        pixelReader = writableImage.getPixelReader();
+        width = (int)writableImage.getWidth();
+        height = (int)writableImage.getHeight();
+        buffer = new byte[width * height * 4];
+        pixelReader.getPixels(0,0, width, height, PixelFormat.getByteBgraInstance(), buffer,0,width * 4);
+
+        Radon.inverseRadonTransform(pixelWriter2, output, writableImage2, (int)myImage.getHeight());
 
     }
 
@@ -67,5 +82,9 @@ public class Controller  {
 
     public static PixelReader getPixelReader() {
         return pixelReader;
+    }
+
+    public static WritableImage getWritableImage() {
+        return writableImage;
     }
 }

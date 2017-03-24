@@ -14,7 +14,7 @@ public class Radon {
     private static List<List<Double>> brightnesseses = new ArrayList<>();
 
 
-    public static void radonTransform(Image image, PixelWriter pixelWriter, ImageView sin, WritableImage wt, Image myImage) {
+    public static void radonTransform(PixelWriter pixelWriter, ImageView sin, WritableImage wt) {
         detectors = new ArrayList<>();
 
         emitter = new Emitter();
@@ -31,21 +31,48 @@ public class Radon {
                 detectors.get(j).setAll(
                         Input.getR() * Math.cos(i*Input.getAlfa() + Math.PI - Input.getFi()/2 + j*(Input.getFi()/(Input.getDetectorsNumber()-1))),
                         Input.getR() * Math.sin(i*Input.getAlfa() + Math.PI - Input.getFi()/2 + j*(Input.getFi()/(Input.getDetectorsNumber()-1))));
-                lines.add(bresenham.bresenhamLine((int)emitter.getX(), (int)emitter.getY(), (int)detectors.get(j).getX(), (int)detectors.get(j).getY()));
+                lines.add(bresenham.normal((int)emitter.getX(), (int)emitter.getY(), (int)detectors.get(j).getX(), (int)detectors.get(j).getY()));
             }
             brightnesseses.add(lines);
         }
 
-        for (int k = 0; k < Input.getEmittersNumber(); k++) {
-            for (int i = 0; i < Input.getDetectorsNumber(); i++) {
-                pixelWriter.setColor(i, k, Color.hsb(0, 0.0, ((brightnesseses.get(k).get(i)-Bresenham.getMinBrightness())/(Bresenham.getMaxBrightness()-Bresenham.getMinBrightness()))));
+        for (int i = 0; i < Input.getEmittersNumber(); i++) {
+            for (int j = 0; j < Input.getDetectorsNumber(); j++) {
+                pixelWriter.setColor(j, i, Color.hsb(0, 0.0, ((brightnesseses.get(i).get(j)-Bresenham.getMinBrightness())/(Bresenham.getMaxBrightness()-Bresenham.getMinBrightness()))));
             }
         }
         sin.setImage(wt);
 
     }
 
-    public void inverseRadonTransform() {
+    private static List<List<Pair>> outputImage = new ArrayList<>();
+
+    public static void inverseRadonTransform(PixelWriter pixelWriter, ImageView sin, WritableImage wt, int range) {
+        Bresenham.setOutputImage(outputImage);
+        for (int i = 0; i < range; i++) {
+            List<Pair> list = new ArrayList<>();
+            for (int j = 0; j < range; j++) {
+                list.add(new Pair());
+            }
+            outputImage.add(list);
+        }
+
+        for (int i = 0; i < Input.getEmittersNumber(); i++) {
+            emitter.setAll(Math.floor(Input.getR()*Math.cos(i*Input.getAlfa())), Math.floor(Input.getR()*Math.sin(i*Input.getAlfa())));
+            for (int j = 0; j < Input.getDetectorsNumber(); j++) {
+                detectors.get(j).setAll(
+                        Input.getR() * Math.cos(i*Input.getAlfa() + Math.PI - Input.getFi()/2 + j*(Input.getFi()/(Input.getDetectorsNumber()-1))),
+                        Input.getR() * Math.sin(i*Input.getAlfa() + Math.PI - Input.getFi()/2 + j*(Input.getFi()/(Input.getDetectorsNumber()-1))));
+                Bresenham.inverted((int)detectors.get(j).getX(), (int)detectors.get(j).getY(), (int)emitter.getX(), (int)emitter.getY(), i, j);
+            }
+        }
+
+        for (int i = 0; i < range; i++) {
+            for (int j = 0; j < range; j++) {
+                pixelWriter.setColor(j, i, Color.hsb(0, 0.0, outputImage.get(i).get(j).getBrightness()));
+            }
+        }
+        sin.setImage(wt);
 
     }
 
