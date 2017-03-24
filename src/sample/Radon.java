@@ -1,94 +1,46 @@
 package sample;
 
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.*;
 import javafx.util.Pair;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Radon {
 
-    private int d, dx, dy, ai, bi, xi, yi;
-    private int x, y;
-    private ArrayList<ArrayList<Pair<Integer, Integer>>> lines = new ArrayList<>();
-    private ArrayList<Double> brightnesses = new ArrayList<>();
+    private static Emitter emitter;
+    private static ArrayList<Detector> detectors;
 
-    void directionX(int a, int b, boolean isX) {
-        if (isX) {
-            if (a < b) {
-                xi = 1;
-                dx = b - a;
-            } else {
-                xi = -1;
-                dx = a - b;
-            }
-        } else {
-            if (a < b) {
-                yi = 1;
-                dy = b - a;
-            } else {
-                yi = -1;
-                dy = a - b;
-            }
+    private static List<List<ArrayList<Pair<Integer, Integer>>>> allLines = new ArrayList<>();
+    private static ArrayList<ArrayList<Double>> brightnesseses = new ArrayList<>();
+
+
+    public static void radonTransform(Image image, PixelWriter pixelWriter, ImageView sin, WritableImage wt) {
+        long start = System.nanoTime();
+        detectors = new ArrayList<>();
+
+        emitter = new Emitter();
+        for (int i = 0; i < Input.getDetectorsNumber(); i++) {
+            detectors.add(new Detector());
         }
-    }
+        Bresenham bresenham = new Bresenham();
 
-    void bresenhamLine(int x1, int y1, int x2, int y2) {
-        ArrayList<Pair<Integer, Integer>> points = new ArrayList<>();
-        x = x1;
-        y = y1;
-        directionX(x1, x2, true);
-        directionX(y1, y2, false);
-        points.add(new Pair<>(x, y));
-        if (dx > dy)
-        {
-            ai = (dy - dx) * 2;
-            bi = dy * 2;
-            d = bi - dx;
-            while (x != x2)
-            {
-                if (d >= 0)
-                {
-                    x += xi;
-                    y += yi;
-                    d += ai;
-                }
-                else
-                {
-                    d += bi;
-                    x += xi;
-                }
-                points.add(new Pair<>(x, y));
+        for (int i = 0; i < Input.getEmittersNumber(); i++) {
+            emitter.setAll(Math.floor(Input.getR()*Math.cos(i*Input.getAlfa())), Math.floor(Input.getR()*Math.sin(i*Input.getAlfa())));
+            List<ArrayList<Pair<Integer, Integer>>> lines = new ArrayList<>();
+            for (int j = 0; j < Input.getDetectorsNumber(); j++) {
+                detectors.get(j).setAll(
+                        Input.getR() * Math.cos(i*Input.getAlfa() + Math.PI - Input.getFi()/2 + j*(Input.getFi()/(Input.getDetectorsNumber()-1))),
+                        Input.getR() * Math.sin(i*Input.getAlfa() + Math.PI - Input.getFi()/2 + j*(Input.getFi()/(Input.getDetectorsNumber()-1))));
+                lines.add(bresenham.bresenhamLine((int)emitter.getX(), (int)emitter.getY(), (int)detectors.get(j).getX(), (int)detectors.get(j).getY()));
             }
-        }
-        else
-        {
-            ai = ( dx - dy ) * 2;
-            bi = dx * 2;
-            d = bi - dy;
-            while (y != y2)
-            {
-                if (d >= 0)
-                {
-                    x += xi;
-                    y += yi;
-                    d += ai;
-                }
-                else
-                {
-                    d += bi;
-                    y += yi;
-                }
-                points.add(new Pair<>(x, y));
-
-            }
+            allLines.add(lines);
         }
 
-        lines.add(points);
-    }
 
-    public void radonTransform(Image image, int iteration, PixelWriter pixelWriter, ImageView sin, WritableImage wt) {
+
         double maxBrightness = 0.0;
         double minBrightness = 1.0;
         PixelReader pixelReader = image.getPixelReader();
@@ -97,24 +49,39 @@ public class Radon {
         byte[] buffer = new byte[width * height * 4];
         pixelReader.getPixels(0,0, width, height, PixelFormat.getByteBgraInstance(), buffer,0,width * 4);
         int imageWidth = (int)image.getWidth()/2;
-        for (int i = 0; i < lines.size(); i++) {
-            double brightness = 0;
-            for (int j = 0; j < lines.get(i).size(); j++) {
-                brightness += pixelReader.getColor((lines.get(i).get(j).getKey()+imageWidth)%(int)(image.getWidth()), (lines.get(i).get(j).getValue()+imageWidth)%(int)(image.getWidth())).getBrightness();
+        for (int k = 0; k < allLines.size(); k++) {
+            ArrayList<Double> brightnesses = new ArrayList<>();
+            for (int i = 0; i < allLines.get(k).size(); i++) {
+                double brightness = 0;
+                for (int j = 0; j < allLines.get(k).get(i).size(); j++) {
+                    brightness += pixelReader.getColor((allLines.get(k).get(i).get(j).getKey()+imageWidth)%(int)(image.getWidth()), (allLines.get(k).get(i).get(j).getValue()+imageWidth)%(int)(image.getWidth())).getBrightness();
+                }
+                if (brightness/allLines.get(k).get(i).size() > maxBrightness) {
+                    maxBrightness = brightness/allLines.get(k).get(i).size();
+                }
+                if (brightness/allLines.get(k).get(i).size() < minBrightness) {
+                    minBrightness = brightness/allLines.get(k).get(i).size();
+                }
+//                System.out.print(allLines.get(k).get(i).size()+ " ");
+                brightnesses.add(brightness/allLines.get(k).get(i).size());
             }
-            if (brightness/lines.get(i).size() > maxBrightness) {
-                maxBrightness = brightness/lines.get(i).size();
-            }
-            if (brightness/lines.get(i).size() < minBrightness) {
-                minBrightness = brightness/lines.get(i).size();
-            }
-            brightnesses.add(brightness/lines.get(i).size());
+//            System.out.println();
+            brightnesseses.add(brightnesses);
         }
 
-        for (int i = 0; i < lines.size(); i++) {
-            pixelWriter.setColor(i, iteration, Color.hsb(0, 0.0, (brightnesses.get(i)-minBrightness)/(maxBrightness-minBrightness)));
-
-
+        for (int k = 0; k < Input.getEmittersNumber(); k++) {
+            for (int i = 0; i < Input.getDetectorsNumber(); i++) {
+                pixelWriter.setColor(k, i, Color.hsb(0, 0.0, (brightnesseses.get(k).get(i)-minBrightness)/(maxBrightness-minBrightness)));
+            }
         }
+        sin.setImage(wt);
+
+        long elapsedTime = System.nanoTime() - start;
+        System.out.println((double)elapsedTime/1000000000);
     }
+
+    public void inverseRadonTransform() {
+
+    }
+
 }
