@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.scene.image.*;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
@@ -66,9 +65,26 @@ public class Radon {
             }
         }
 
+        double maxbright = 0.0, minbright = 1.0;
         for (int i = 0; i < range; i++) {
             for (int j = 0; j < range; j++) {
-                Controller.getOutputImageWriter().setColor(i, j, Color.hsb(0, 0.0, outputImage.get(i).get(j).getBrightness()));
+                if (maxbright < outputImage.get(i).get(j).getBrightness()) {
+                    maxbright = outputImage.get(i).get(j).getBrightness();
+                }
+                if (outputImage.get(i).get(j).getBrightness() > 0.001) {
+                    if (minbright > outputImage.get(i).get(j).getBrightness()) {
+                        minbright = outputImage.get(i).get(j).getBrightness();
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < range; i++) {
+            for (int j = 0; j < range; j++) {
+                double bright = ((outputImage.get(i).get(j).getBrightness()-minbright)/(maxbright-minbright));
+                if (bright < 0) {
+                    bright = 0;
+                }
+                Controller.getOutputImageWriter().setColor(i, j, Color.hsb(0, 0.0, bright));
             }
         }
     }

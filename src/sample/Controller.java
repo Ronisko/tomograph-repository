@@ -71,12 +71,9 @@ public class Controller  {
     }
 
     private void prepareSinogramReader() {
-//        System.out.println("DUPA");
         sinogramReader = writableSinogram.getPixelReader();
-        int width = (int)writableSinogram.getWidth(); //liczba detektorów
-//        System.out.println(width);
-        int height = (int)writableSinogram.getHeight(); //liczba emiterów
-//        System.out.println(height);
+        int width = (int)writableSinogram.getWidth();
+        int height = (int)writableSinogram.getHeight();
         byte[] buffer = new byte[width * height * 4];
         sinogramReader.getPixels(0,0, width, height, PixelFormat.getByteBgraInstance(), buffer,0,width * 4);
     }
