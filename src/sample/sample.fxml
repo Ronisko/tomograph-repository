@@ -1,56 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.*?>
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="300.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="300.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="200.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="300.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="2.0" prefHeight="2.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="2.0" prefHeight="2.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="2.0" prefHeight="2.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <ImageView fx:id="myImageView1" fitHeight="200.0" fitWidth="200.0" onMouseClicked="#handleImageViewAction" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="myImageView1" fitHeight="300.0" fitWidth="300.0" onMouseClicked="#handleImageViewAction" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <image>
             <Image fx:id="myImage" url="@../Kolo.jpg" />
          </image></ImageView>
-       <ImageView fx:id="sinogram" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
-       <ImageView fx:id="output" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
-      <Text rotate="-30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Liczba detektorów" wrappingWidth="122.7294921875" GridPane.rowIndex="1">
+       <ImageView fx:id="sinogram" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+       <ImageView fx:id="output" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Liczba detektorów" wrappingWidth="122.7294921875" GridPane.columnIndex="2" GridPane.rowIndex="3">
          <GridPane.margin>
             <Insets left="2.0" />
          </GridPane.margin></Text>
-      <Text rotate="-30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Liczba emiterów" GridPane.rowIndex="2">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Liczba emiterów" GridPane.columnIndex="2" GridPane.rowIndex="4">
          <GridPane.margin>
             <Insets left="2.0" />
          </GridPane.margin></Text>
-      <Text rotate="-30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kąt rozwarcia" GridPane.rowIndex="3">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Kąt rozwarcia" GridPane.columnIndex="2" GridPane.rowIndex="5">
          <GridPane.margin>
             <Insets left="2.0" />
          </GridPane.margin></Text>
-      <TextField fx:id="myTextField1" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <TextField fx:id="myTextField2" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <TextField fx:id="myTextField3" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-      <Button fx:id="myButton" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleButtonAction" text="Button" GridPane.rowIndex="4" />
+      <TextField fx:id="myTextField1" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+      <TextField fx:id="myTextField2" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+      <TextField fx:id="myTextField3" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+      <Button fx:id="myButton" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleButtonAction" text="Button" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+      <Slider fx:id="slider" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="2" />
    </children>
 </GridPane>

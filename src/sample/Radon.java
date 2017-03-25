@@ -46,6 +46,7 @@ public class Radon {
     private static List<List<Pair>> outputImage = new ArrayList<>();
 
     public static void inverseRadonTransform(int range) {
+        int counter = 0;
         Bresenham.setOutputImage(outputImage);
         for (int i = 0; i < range; i++) {
             List<Pair> list = new ArrayList<>();
@@ -63,28 +64,42 @@ public class Radon {
                         Input.getR() * Math.sin(i*Input.getAlfa() + Math.PI - Input.getFi()/2 + j*(Input.getFi()/(Input.getDetectorsNumber()-1))));
                 Bresenham.inverted((int)detectors.get(j).getX(), (int)detectors.get(j).getY(), (int)emitter.getX(), (int)emitter.getY(), j, i);
             }
+            if (i%(Input.getEmittersNumber()/10) == 0) {
+                if (i == 0) {
+                    show(range, counter);
+                } else {
+                    show(range, counter);
+                }
+                counter++;
+            }
         }
 
+        show(range, counter);
+
+    }
+
+    private static void show(int range, int step) {
         double maxbright = 0.0, minbright = 1.0;
         for (int i = 0; i < range; i++) {
             for (int j = 0; j < range; j++) {
                 if (maxbright < outputImage.get(i).get(j).getBrightness()) {
                     maxbright = outputImage.get(i).get(j).getBrightness();
                 }
-                if (outputImage.get(i).get(j).getBrightness() > 0.001) {
+                if (outputImage.get(i).get(j).getBrightness() > 0.1) {
                     if (minbright > outputImage.get(i).get(j).getBrightness()) {
                         minbright = outputImage.get(i).get(j).getBrightness();
                     }
                 }
             }
+
         }
         for (int i = 0; i < range; i++) {
             for (int j = 0; j < range; j++) {
                 double bright = ((outputImage.get(i).get(j).getBrightness()-minbright)/(maxbright-minbright));
-                if (bright < 0) {
+                if (bright <= 0.01) {
                     bright = 0;
                 }
-                Controller.getOutputImageWriter().setColor(i, j, Color.hsb(0, 0.0, bright));
+                Controller.outputImageWriter.get(step).setColor(i, j, Color.hsb(0, 0.0, bright));
             }
         }
     }

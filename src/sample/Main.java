@@ -16,7 +16,7 @@ public class Main extends Application {
         controller.setStage(primaryStage);
 
         primaryStage.setTitle("Tomograph Simulator");
-        primaryStage.setScene(new Scene(root, 600, 600));
+        primaryStage.setScene(new Scene(root, 1200, 700));
         primaryStage.show();
     }
 

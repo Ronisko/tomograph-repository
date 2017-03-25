@@ -140,8 +140,6 @@ public class Bresenham {
     }
 
     private static double getSinogramColor(int x, int y) {
-        int imageWidth = (int)Controller.getWritableSinogram().getWidth();
-        int imageHeight = (int)Controller.getWritableSinogram().getHeight();
         return Controller.getSinogramReader().getColor(y, x).getBrightness();
     }
 
