@@ -1,12 +1,8 @@
 
 .idea/
-CT_ScoutView.jpg
-src/Kropka.jpg
-Kwadraty2.jpg
-Paski2.jpg
-SADDLE_PE.JPG
-Shepp_logan.png
-Shepp_logan_iradon.png
+
 out/
 tomograph-repository.iml
 JavaFxApplication.iml
+/target/
+target/

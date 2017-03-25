@@ -34,7 +34,7 @@
    <children>
       <ImageView fx:id="myImageView1" fitHeight="300.0" fitWidth="300.0" onMouseClicked="#handleImageViewAction" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <image>
-            <Image fx:id="myImage" url="@../Kolo.jpg" />
+            <Image fx:id="myImage" url="@Kolo.jpg" />
          </image></ImageView>
        <ImageView fx:id="sinogram" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="1" />
        <ImageView fx:id="output" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="1" />
