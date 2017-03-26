@@ -9,10 +9,11 @@ public class Radon {
 
     private static Emitter emitter;
     private static List<Detector> detectors;
-    private static List<List<Double>> brightnesses = new ArrayList<>();
+    private static List<List<Double>> brightnesses;
 
 
     public static void radonTransform() {
+        brightnesses = new ArrayList<>();
         detectors = new ArrayList<>();
 
         emitter = new Emitter();
@@ -43,9 +44,10 @@ public class Radon {
         }
     }
 
-    private static List<List<Pair>> outputImage = new ArrayList<>();
+    private static List<List<Pair>> outputImage;
 
     public static void inverseRadonTransform(int range) {
+        outputImage = new ArrayList<>();
         int counter = 0;
         Bresenham.setOutputImage(outputImage);
         for (int i = 0; i < range; i++) {

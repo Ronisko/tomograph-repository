@@ -88,9 +88,9 @@ public class Controller implements Initializable{
     private FileChooser fileChooser = new FileChooser();
     private static PixelReader imageReader, sinogramReader;
     private static PixelWriter sinogramWriter;
-    public static List<PixelWriter> outputImageWriter = new ArrayList<>();
+    public static List<PixelWriter> outputImageWriter;
     private static WritableImage writableSinogram, writableOutputImage;
-    private static List<WritableImage> writableout = new ArrayList<>();
+    private static List<WritableImage> writableout;
     private static int size;
 
 
@@ -189,6 +189,8 @@ public class Controller implements Initializable{
 
     @FXML
     private void handleButtonAction() {
+        writableout = new ArrayList<>();
+        outputImageWriter = new ArrayList<>();
         prepareInput();
         sinogram.setImage(null);
 
