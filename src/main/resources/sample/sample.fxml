@@ -2,7 +2,9 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -38,22 +40,54 @@
          </image></ImageView>
        <ImageView fx:id="sinogram" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="1" />
        <ImageView fx:id="output" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="1" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Liczba detektorów" wrappingWidth="122.7294921875" GridPane.columnIndex="2" GridPane.rowIndex="3">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Liczba detektorów" wrappingWidth="122.7294921875" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <GridPane.margin>
-            <Insets left="2.0" />
+            <Insets left="20.0" />
          </GridPane.margin></Text>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Liczba emiterów" GridPane.columnIndex="2" GridPane.rowIndex="4">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Liczba emiterów" GridPane.columnIndex="1" GridPane.rowIndex="4">
          <GridPane.margin>
-            <Insets left="2.0" />
+            <Insets left="20.0" />
          </GridPane.margin></Text>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Kąt rozwarcia" GridPane.columnIndex="2" GridPane.rowIndex="5">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Kąt rozwarcia" GridPane.columnIndex="1" GridPane.rowIndex="5">
          <GridPane.margin>
-            <Insets left="2.0" />
+            <Insets left="20.0" />
          </GridPane.margin></Text>
-      <TextField fx:id="myTextField1" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-      <TextField fx:id="myTextField2" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-      <TextField fx:id="myTextField3" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-      <Button fx:id="myButton" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleButtonAction" text="Button" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+      <TextField fx:id="myTextField1" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+      <TextField fx:id="myTextField2" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+      <TextField fx:id="myTextField3" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+      <Button fx:id="myButton" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleButtonAction" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="6" />
       <Slider fx:id="slider" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="2" />
+      <Button fx:id="dicomButton" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleDicomButton" text="Button" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="6" />
+      <DatePicker fx:id="birthDateText" visible="false" GridPane.columnIndex="4" GridPane.rowIndex="5">
+         <GridPane.margin>
+            <Insets left="120.0" />
+         </GridPane.margin></DatePicker>
+      <TextField fx:id="nameText" visible="false" GridPane.columnIndex="4" GridPane.rowIndex="3">
+         <GridPane.margin>
+            <Insets left="120.0" />
+         </GridPane.margin></TextField>
+      <TextArea fx:id="commentText" prefHeight="200.0" prefWidth="200.0" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="4" />
+      <Text fx:id="nazwa" layoutX="170.0" layoutY="656.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Imię i nazwisko" visible="false" wrappingWidth="122.7294921875" GridPane.columnIndex="4" GridPane.rowIndex="3">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+      </Text>
+      <Text fx:id="sex" strokeType="OUTSIDE" strokeWidth="0.0" text="Płeć" visible="false" GridPane.columnIndex="4" GridPane.rowIndex="4">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin></Text>
+      <Text fx:id="birthDate" strokeType="OUTSIDE" strokeWidth="0.0" text="Data urodzenia" visible="false" GridPane.columnIndex="4" GridPane.rowIndex="5">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin></Text>
+      <TextField fx:id="sexText" visible="false" GridPane.columnIndex="4" GridPane.rowIndex="4">
+         <GridPane.margin>
+            <Insets left="120.0" />
+         </GridPane.margin></TextField>
+      <Text fx:id="comment" strokeType="OUTSIDE" strokeWidth="0.0" text="Komentarz" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="3">
+         <GridPane.margin>
+            <Insets left="150.0" />
+         </GridPane.margin>
+      </Text>
    </children>
 </GridPane>
